@@ -7,6 +7,7 @@ author: 竹林听雨
 abbrlink: 443887f3
 published: 2025-10-09 22:13:55
 updated: 2025-10-09 22:13:55
+sticky: 100
 ---
 # ThreadLocal结构
 
