@@ -32,6 +32,15 @@ async function getRawSortedPosts() {
 	});
 
 	const sorted = allBlogPosts.sort((a, b) => {
+		// 优先按 sticky 降序排列：sticky 值越大越靠前
+		// 有 sticky 的文章排在无 sticky 的文章前面
+		const stickyA = a.data.sticky ?? -Infinity;
+		const stickyB = b.data.sticky ?? -Infinity;
+		if (stickyA !== stickyB) {
+			return stickyB > stickyA ? 1 : -1;
+		}
+
+		// sticky 相同（包括都没有）时，按发布日期降序排列（越新越前）
 		const dateA = new Date(a.data.published);
 		const dateB = new Date(b.data.published);
 		return dateA > dateB ? -1 : 1;

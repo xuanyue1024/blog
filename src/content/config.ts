@@ -11,6 +11,8 @@ const postsCollection = defineCollection({
 		tags: z.array(z.string()).optional().default([]),
 		lang: z.string().optional().default(""),
 		abbrlink: z.string().optional(), // 优先使用的自定义 URL 链接
+		// sticky：置顶权重，数字越大越靠前；不填则按发布日期默认排序
+		sticky: z.number().optional(),
 
 		/* For internal use */
 		prevTitle: z.string().default(""),
