@@ -48,20 +48,20 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
-      name: '随机图',
-      url: 'https://pic.onani.cn',
+      name: '统计',
+      url: 'https://cloud.umami.is/analytics/us/share/bv965ko6FIRUoWem',
       external: true,
     },
 		{
 			name: "GitHub",
-			url: "https://github.com/saicaca/fuwari", // 内部链接不应包含基础路径，因为它会自动添加
+			url: "https://github.com/xuanyue1024", // 内部链接不应包含基础路径，因为它会自动添加
 			external: true, // 显示外部链接图标并在新标签页中打开
 		},
 	],
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/demo-avatar.png", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+	avatar: "https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "竹林听雨",
 	bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 	links: [
