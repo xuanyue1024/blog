@@ -24,7 +24,7 @@ updated: 2026-01-19 23:01:38
 
 ## 配置步骤
 
-<img src="./assets/cdn.svg" alt="CDN Animation" />
+<img src="./assets/cdn.png" alt="CDN Animation" />
 
 ### 步骤 1：在 Cloudflare 配置 DNS
 
