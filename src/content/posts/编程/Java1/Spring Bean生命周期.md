@@ -3,7 +3,6 @@ author: 竹林听雨
 tags:
   - Spring
 title: Spring Bean生命周期
-category: 编程/Java
 abbrlink: 9f2c44e1
 published: 2025-09-15 13:41:43
 updated: 2025-09-15 22:12:56

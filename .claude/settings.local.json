@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for f in \"D:/biancode/Pages/blog/src/content/posts/\"*.md)",
+      "Bash(do echo \"=== $f ===\")",
+      "Read(//d/biancode/Pages/blog/**)",
+      "Bash(done)"
+    ]
+  }
+}
