@@ -11,6 +11,7 @@ const postsCollection = defineCollection({
 		tags: z.array(z.string()).optional().default([]),
 		category: z.string().optional().nullable().default(""),
 		lang: z.string().optional().default(""),
+		abbrlink: z.string().optional(), // 优先使用的自定义 URL 链接
 
 		/* For internal use */
 		prevTitle: z.string().default(""),

@@ -9,6 +9,15 @@ async function getRawSortedPosts() {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 
+	// 处理 URL slug 生成逻辑
+	// 默认情况下，Astro 使用文件名作为 slug。
+	// 这里我们增加逻辑：如果文章 frontmatter 中定义了 abbrlink 且不为空，则优先使用它。
+	allBlogPosts.forEach((post) => {
+		if (post.data.abbrlink && post.data.abbrlink.trim() !== "") {
+			post.slug = post.data.abbrlink.trim();
+		}
+	});
+
 	const sorted = allBlogPosts.sort((a, b) => {
 		const dateA = new Date(a.data.published);
 		const dateB = new Date(b.data.published);
