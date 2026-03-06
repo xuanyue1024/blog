@@ -6,6 +6,7 @@ title: Spring Bean生命周期
 abbrlink: 9f2c44e1
 published: 2025-09-15 13:41:43
 updated: 2025-09-15 22:12:56
+sticky: 100
 ---
 # Spring Bean 的生命周期
 其实就是 **一个 Bean 从创建、初始化、使用、销毁** 的完整过程。Spring 容器（`ApplicationContext`）在管理 Bean 的过程中，会按照固定的流程来操作。下面我给你按顺序梳理一下：
