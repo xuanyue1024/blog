@@ -5,11 +5,14 @@ import { getCategoryList } from "../../utils/content-utils";
 import ButtonLink from "../control/ButtonLink.astro";
 import WidgetLayout from "./WidgetLayout.astro";
 
+// getCategoryList 返回的 name 为 "/" 分隔的路径字符串，如 "编程"、"编程/Java"。
+// 父级和子级分类都会出现，根据 "/" 数量判断缩进层级。
 const categories = await getCategoryList();
 
 const COLLAPSED_HEIGHT = "7.5rem";
 const COLLAPSE_THRESHOLD = 5;
 
+// 分类数量超过阈值时默认折叠
 const isCollapsed = categories.length >= COLLAPSE_THRESHOLD;
 
 interface Props {
@@ -23,13 +26,25 @@ const style = Astro.props.style;
 <WidgetLayout name={i18n(I18nKey.categories)} id="categories" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT}
                 class={className} style={style}
 >
-    {categories.map((c) =>
-        <ButtonLink
-            url={c.url}
-            badge={String(c.count)}
-            label={`View all posts in the ${c.name.trim()} category`}
-        >
-            {c.name.trim()}
-        </ButtonLink>
-    )}
+    {categories.map((c) => {
+        // "/" 的数量决定缩进层级：
+        //   "编程"        → depth=0，无缩进
+        //   "编程/Java"   → depth=1，缩进 1rem
+        //   "编程/Java/集合" → depth=2，缩进 2rem
+        const parts = c.name.split("/");
+        const depth = parts.length - 1;
+        // 只展示最后一级名称，父级层级由缩进体现
+        const label = parts[parts.length - 1];
+        return (
+            <div style={depth > 0 ? `padding-left: ${depth * 1}rem` : undefined}>
+                <ButtonLink
+                    url={c.url}
+                    badge={String(c.count)}
+                    label={`View all posts in the ${c.name} category`}
+                >
+                    {label}
+                </ButtonLink>
+            </div>
+        );
+    })}
 </WidgetLayout>

@@ -9,8 +9,10 @@ export let tags: string[];
 export let categories: string[];
 export let sortedPosts: Post[] = [];
 
+// 从 URL 参数中读取当前筛选条件
 const params = new URLSearchParams(window.location.search);
 tags = params.has("tag") ? params.getAll("tag") : [];
+// category 参数为 "/" 分隔的完整路径，如 "编程/Java"
 categories = params.has("category") ? params.getAll("category") : [];
 const uncategorized = params.get("uncategorized");
 
@@ -19,7 +21,8 @@ interface Post {
 	data: {
 		title: string;
 		tags: string[];
-		category?: string;
+		// category 为目录路径字符串，如 "编程/Java"，根目录文章为 null
+		category?: string | null;
 		published: Date;
 	};
 }
@@ -44,6 +47,7 @@ function formatTag(tagList: string[]) {
 onMount(async () => {
 	let filteredPosts: Post[] = sortedPosts;
 
+	// 按标签筛选：文章的 tags 数组中只要有一个匹配即可
 	if (tags.length > 0) {
 		filteredPosts = filteredPosts.filter(
 			(post) =>
@@ -52,12 +56,21 @@ onMount(async () => {
 		);
 	}
 
+	// 按分类筛选：支持前缀匹配，点击父级 "编程" 可匹配 "编程/Java" 下的文章
+	// categories 为 URL 参数 category 的值，即 "/" 分隔的完整路径
 	if (categories.length > 0) {
 		filteredPosts = filteredPosts.filter(
-			(post) => post.data.category && categories.includes(post.data.category),
+			(post) =>
+				post.data.category &&
+				categories.some(
+					(cat) =>
+						post.data.category === cat ||
+						(post.data.category as string).startsWith(cat + "/"),
+				),
 		);
 	}
 
+	// 筛选未分类的文章（放在 posts 根目录，category 为 null）
 	if (uncategorized) {
 		filteredPosts = filteredPosts.filter((post) => !post.data.category);
 	}

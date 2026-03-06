@@ -1,6 +1,3 @@
-import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
-
 export function pathsEqual(path1: string, path2: string) {
 	const normalizedPath1 = path1.replace(/^\/|\/$/g, "").toLowerCase();
 	const normalizedPath2 = path2.replace(/^\/|\/$/g, "").toLowerCase();
@@ -21,12 +18,13 @@ export function getTagUrl(tag: string): string {
 	return url(`/archive/?tag=${encodeURIComponent(tag.trim())}`);
 }
 
+/**
+ * 根据分类路径字符串生成跳转 URL。
+ * category 为 "/" 分隔的路径，如 "编程/Java"。
+ * 空字符串或 null 时跳转到未分类页。
+ */
 export function getCategoryUrl(category: string | null): string {
-	if (
-		!category ||
-		category.trim() === "" ||
-		category.trim().toLowerCase() === i18n(I18nKey.uncategorized).toLowerCase()
-	)
+	if (!category || category.trim() === "")
 		return url("/archive/?uncategorized=true");
 	return url(`/archive/?category=${encodeURIComponent(category.trim())}`);
 }
