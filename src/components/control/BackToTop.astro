@@ -3,12 +3,20 @@ import { Icon } from "astro-icon/components";
 ---
 
 <!-- There can't be a filter on parent element, or it will break `fixed` -->
+<!--
+  固定按钮容器：
+  1. 仅在桌面端显示（hidden lg:block）。
+  2. 外层设置 pointer-events: none，避免覆盖页面可点击区域。
+  3. 真正可点击的是内部按钮本身（pointer-events: auto）。
+-->
 <div class="back-to-top-wrapper hidden lg:block">
-    <div id="jump-to-comments-btn" class="back-to-comments-btn flex items-center rounded-2xl overflow-hidden transition" onclick="jumpToComments()">
+    <!-- 评论区跳转按钮：仅文章页显示（由 comments-page-hidden + JS 控制） -->
+    <div id="jump-to-comments-btn" class="back-to-comments-btn comments-page-hidden flex items-center rounded-2xl overflow-hidden transition" onclick="jumpToComments()">
         <button aria-label="Jump to Comments" class="btn-card h-[3.75rem] w-[3.75rem]">
             <Icon name="material-symbols:chat-rounded" class="mx-auto"></Icon>
         </button>
     </div>
+    <!-- 回到顶部按钮：由全局滚动逻辑控制显隐（Layout.astro 中 scrollFunction） -->
     <div id="back-to-top-btn" class="back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="backToTop()">
         <button aria-label="Back to Top" class="btn-card h-[3.75rem] w-[3.75rem]">
             <Icon name="material-symbols:keyboard-arrow-up-rounded" class="mx-auto"></Icon>
@@ -17,6 +25,7 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <style lang="stylus">
+// 外层仅负责定位，不拦截页面事件。
 .back-to-top-wrapper
     width: 3.75rem
     height: 3.75rem
@@ -25,6 +34,7 @@ import { Icon } from "astro-icon/components";
     top: 0
     pointer-events: none
 
+// 两个悬浮按钮的共用视觉样式。
 .back-to-top-btn,
 .back-to-comments-btn
     color: var(--primary)
@@ -45,26 +55,65 @@ import { Icon } from "astro-icon/components";
     &:active
       transform: translateX(5rem) scale(0.9)
 
+// 保持回到顶部按钮原有位置不变。
 .back-to-top-btn
     bottom: 10rem
 
+// 评论按钮位于回到顶部按钮下方。
 .back-to-comments-btn
     bottom: 5.5rem
+
+// 非文章页隐藏评论按钮（避免在无评论区页面出现无效入口）。
+.comments-page-hidden
+    display: none
 
 </style>
 
 <script is:raw is:inline>
+// 文章详情页中评论区容器的锚点 id（定义在 src/pages/posts/[...slug].astro）。
 const COMMENTS_ANCHOR_ID = 'comments-section';
 
+// 平滑回到页面顶部。
 function backToTop() {
     window.scroll({ top: 0, behavior: 'smooth' });
 }
 
+// 平滑滚动到评论区；若锚点不存在则直接返回。
 function jumpToComments() {
     const commentsAnchor = document.getElementById(COMMENTS_ANCHOR_ID);
     if (!commentsAnchor) {
         return;
     }
     commentsAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// 根据当前路径判断是否为文章页，仅文章页显示评论按钮。
+function syncCommentsButtonPageVisibility() {
+    const commentsBtn = document.getElementById('jump-to-comments-btn');
+    if (!commentsBtn) {
+        return;
+    }
+
+    const isPostPage = window.location.pathname.includes('/posts/');
+    commentsBtn.classList.toggle('comments-page-hidden', !isPostPage);
+}
+
+// 首次加载时立即同步一次，保证刷新后状态正确。
+syncCommentsButtonPageVisibility();
+
+if (window.swup && window.swup.hooks) {
+    // swup 无刷新切页后，路径变化了，需要再次同步评论按钮显隐。
+    window.swup.hooks.on('page:view', () => {
+        syncCommentsButtonPageVisibility();
+    });
+} else {
+    // swup 尚未初始化时，等待启用事件后再绑定 page:view 回调。
+    document.addEventListener('swup:enable', () => {
+        if (window.swup && window.swup.hooks) {
+            window.swup.hooks.on('page:view', () => {
+                syncCommentsButtonPageVisibility();
+            });
+        }
+    });
 }
 </script>
