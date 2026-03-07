@@ -70,8 +70,8 @@ export const navBarConfig: NavBarConfig = {
 			external: true, // 显示外部链接图标并在新标签页中打开
 		},
 		{
-			name: "GitHub",
-			url: "https://github.com/xuanyue1024", // 内部链接不应包含基础路径，因为它会自动添加
+			name: "Ecode",
+			url: "https://github.com/xuanyue1024/e-code", // 内部链接不应包含基础路径，因为它会自动添加
 			external: true, // 显示外部链接图标并在新标签页中打开
 		},
 	],
@@ -100,9 +100,9 @@ export const profileConfig: ProfileConfig = {
 			url: "https://gitee.com/xuanyue03",
 		},
 		{
-			name: "Steam",
-			icon: "fa6-brands:steam",
-			url: "https://store.steampowered.com",
+			name: "酷安",
+			icon: "fa6-brands:android",
+			url: "http://www.coolapk.com/u/1869130",
 		},
 		{
 			name: "CSDN",
