@@ -32,3 +32,5 @@ yarn.lock
 
 # Obsidian local workspace state
 .obsidian/workspace.json
+
+src/content/posts/博客示例
