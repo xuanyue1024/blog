@@ -14,6 +14,12 @@
       "icon": "lucide-arrow-big-up",
       "name": "Git: Commit-and-sync with specific message",
       "mode": "any"
+    },
+    {
+      "id": "abbrlink-hash-generator:regenerate-current-with-confirm",
+      "icon": "lucide-activity-square",
+      "name": "Abbrlink: 重算当前文件哈希（覆盖前确认）",
+      "mode": "any"
     }
   ],
   "macros": [],

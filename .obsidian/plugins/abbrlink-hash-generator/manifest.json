@@ -1,0 +1,10 @@
+{
+  "id": "abbrlink-hash-generator",
+  "name": "Abbrlink Hash Generator",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "为 Markdown Frontmatter 生成哈希值（默认写入 abbrlink），支持 CRC32/MD5/SHA256。",
+  "author": "Your Name",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
