@@ -70,6 +70,9 @@ const bannerOffsetByPosition = {
 };
 const bannerOffset =
 	bannerOffsetByPosition[siteConfig.banner.position || "center"];
+
+// umami配置
+const umami = siteConfig.analytics?.umami;
 ---
 
 <!DOCTYPE html>
@@ -101,7 +104,12 @@ const bannerOffset =
 
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<script defer src="https://cloud.umami.is/script.js" data-website-id="16af8c8f-ff88-4d6a-a8d3-4ec3cfb97022"></script>
+		
+		<!-- 统计接口 -->
+		{umami?.enable && umami?.websiteId && umami?.domain && (
+			<script defer src={`${umami.domain}/script.js`} data-website-id={umami.websiteId}></script>
+		)}
+
 		{favicons.map(favicon => (
 			<link rel="icon"
 				  href={favicon.src.startsWith('/') ? url(favicon.src) : favicon.src}
@@ -364,12 +372,81 @@ function showBanner() {
 	banner.classList.remove('opacity-0', 'scale-105');
 }
 
+function formatPostStatsCount(value: unknown) {
+	// 统一格式化数字显示，避免直接输出长整型影响可读性。
+	if (!Number.isFinite(value)) return '--';
+	return new Intl.NumberFormat('zh-CN').format(value as number);
+}
+
+//统计数据处理
+async function loadPostStats(container: Element) {
+	// 只处理有效的统计容器节点。
+	if (!(container instanceof HTMLElement)) return;
+	// 防止重复请求：同一个容器初始化一次即可。
+	if (container.dataset.loaded === 'true') return;
+	container.dataset.loaded = 'true';
+
+	const region = container.dataset.umamiRegion;
+	const shareId = container.dataset.umamiShareId;
+	const apiBase = container.dataset.umamiApiBase;
+	const pagePath = container.dataset.umamiPath || window.location.pathname;
+
+	const root = container.parentElement;
+	const pageviewsEl = root?.querySelector('[data-stat="pageviews"]');
+	const visitorsEl = root?.querySelector('[data-stat="visitors"]');
+
+	// 配置不完整时直接退出，保留占位符。
+	if (!region || !shareId || !apiBase) {
+		if (pageviewsEl) pageviewsEl.textContent = '--';
+		if (visitorsEl) visitorsEl.textContent = '--';
+		return;
+	}
+
+	try {
+		// 1) 先通过分享接口拿到只读 token 和 websiteId。
+		const shareRes = await fetch(`${apiBase}/${region}/api/share/${shareId}`);
+		if (!shareRes.ok) throw new Error(`Share API error: ${shareRes.status}`);
+		const shareData = await shareRes.json();
+
+		// 2) 再按当前文章路径精确匹配拉取累计统计数据。
+		const statsUrl = new URL(`${apiBase}/${region}/api/websites/${shareData.websiteId}/stats`);
+		statsUrl.searchParams.set('startAt', '0');
+		statsUrl.searchParams.set('endAt', String(Date.now()));
+		statsUrl.searchParams.set('path', `eq.${pagePath}`);
+
+		const statsRes = await fetch(statsUrl.toString(), {
+			headers: {
+				'x-umami-share-token': shareData.token,
+			},
+		});
+		if (!statsRes.ok) throw new Error(`Stats API error: ${statsRes.status}`);
+		const stats = await statsRes.json();
+
+		// 3) 写回页面上的浏览量和访客数。
+		if (pageviewsEl) pageviewsEl.textContent = formatPostStatsCount(stats.pageviews);
+		if (visitorsEl) visitorsEl.textContent = formatPostStatsCount(stats.visitors);
+	} catch {
+		// 请求失败不影响页面其它功能，显示占位符即可。
+		if (pageviewsEl) pageviewsEl.textContent = '--';
+		if (visitorsEl) visitorsEl.textContent = '--';
+	}
+}
+
+function initPostStats() {
+	// 统一扫描当前页面内的统计模块（首屏和 swup 切页后都可复用）。
+	const containers = document.querySelectorAll('[data-umami-post-stats]');
+	containers.forEach((container) => {
+		void loadPostStats(container);
+	});
+}
+
 function init() {
 	// disableAnimation()()		// TODO
 	loadTheme();
 	loadHue();
 	initCustomScrollbar();
 	showBanner();
+	initPostStats();
 }
 
 /* Load settings when entering the site */
@@ -405,7 +482,11 @@ const setup = () => {
 			navbar.classList.add('navbar-hidden')
 		}
 	})
-	window.swup.hooks.on('content:replace', initCustomScrollbar)
+	window.swup.hooks.on('content:replace', () => {
+		// swup 替换内容后，DOM 已变化，需重新初始化滚动条与文章统计。
+		initCustomScrollbar();
+		initPostStats();
+	})
 	window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
 		// change banner height immediately when a link is clicked
 		const bodyElement = document.querySelector('body')
@@ -428,6 +509,8 @@ const setup = () => {
 		}
 	});
 	window.swup.hooks.on('page:view', () => {
+		// 页面切换完成后再次触发，避免个别场景遗漏统计请求。
+		initPostStats();
 		// hide the temp high element when the transition is done
 		const heightExtend = document.getElementById('page-height-extend')
 		if (heightExtend) {

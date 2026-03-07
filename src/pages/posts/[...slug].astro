@@ -86,11 +86,13 @@ const jsonLd = {
             <!-- metadata -->
             <div class="onload-animation">
                 <PostMetadata
-                        class="mb-5"
-                        published={entry.data.published}
-                        updated={entry.data.updated}
-                        tags={entry.data.tags}
-                        category={getCategoryFromId(entry.id)}
+                    class="mb-5"
+                    published={entry.data.published}
+                    updated={entry.data.updated}
+                    tags={entry.data.tags}
+                    category={getCategoryFromId(entry.id)}
+                    showStats={true}
+                    statsPath={getPostUrlBySlug(entry.slug)}
                 ></PostMetadata>
                 {!entry.data.image && <div class="border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div>}
             </div>

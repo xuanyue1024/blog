@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import { siteConfig } from "../config";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import { formatDateToYYYYMMDD } from "../utils/date-utils";
@@ -13,6 +14,8 @@ interface Props {
 	category: string | null;
 	hideTagsForMobile?: boolean;
 	hideUpdateDate?: boolean;
+    showStats?: boolean; //是否展示统计
+    statsPath?: string; //接口路径
 }
 const {
 	published,
@@ -21,8 +24,15 @@ const {
 	category,
 	hideTagsForMobile = false,
 	hideUpdateDate = false,
+    showStats = false,
+    statsPath = "",
 } = Astro.props;
 const className = Astro.props.class;
+
+// 读取 Umami 配置，统计功能开关和连接参数统一放在 config.ts 维护。
+const umami = siteConfig.analytics?.umami;
+// 仅当页面要求展示统计且配置完整时才启用，避免无意义请求。
+const enableStats = Boolean(showStats && umami?.enable && umami?.shareId && umami?.region && umami?.domain && umami?.apiPath);
 ---
 
 <div class:list={["flex flex-wrap text-neutral-500 dark:text-neutral-400 items-center gap-4 gap-x-4 gap-y-2", className]}>
@@ -79,4 +89,34 @@ const className = Astro.props.class;
             {!(tags && tags.length > 0) && <div class="transition text-50 text-sm font-medium">{i18n(I18nKey.noTags)}</div>}
         </div>
     </div>
+
+    <!-- 数据统计 -->
+    {enableStats && (
+        <>
+            <div
+                class="flex items-center"
+                data-umami-post-stats
+                data-umami-region={umami?.region}
+                data-umami-share-id={umami?.shareId}
+                data-umami-api-base={`${umami?.domain}${umami?.apiPath}`}
+                data-umami-path={statsPath}
+            >
+                <div class="meta-icon">
+                    <Icon name="material-symbols:visibility-outline-rounded" class="text-xl"></Icon>
+                </div>
+                <span class="text-50 text-sm font-medium">
+                    <span data-stat="pageviews">--</span>
+                </span>
+            </div>
+
+            <div class="flex items-center" data-umami-post-stats-secondary>
+                <div class="meta-icon">
+                    <Icon name="material-symbols:group-outline-rounded" class="text-xl"></Icon>
+                </div>
+                <span class="text-50 text-sm font-medium">
+                    <span data-stat="visitors">--</span>
+                </span>
+            </div>
+        </>
+    )}
 </div>

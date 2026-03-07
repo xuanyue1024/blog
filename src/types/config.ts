@@ -35,6 +35,18 @@ export type SiteConfig = {
 		depth: 1 | 2 | 3;
 	};
 
+	// 统计分析相关参数
+	analytics?: {
+		umami?: {
+			enable: boolean;
+			region: "us" | "eu";
+			shareId: string;
+			websiteId?: string;
+			domain: string;
+			apiPath?: string;
+		};
+	};
+
 	favicon: Favicon[];
 };
 

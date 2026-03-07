@@ -29,6 +29,16 @@ export const siteConfig: SiteConfig = {
 		enable: true, // 在文章右侧显示目录
 		depth: 3, // 目录中显示的最大标题深度，范围 1 到 3
 	},
+	analytics: {
+		umami: {
+			enable: true,
+			region: "us",
+			shareId: "bv965ko6FIRUoWem",
+			websiteId: "16af8c8f-ff88-4d6a-a8d3-4ec3cfb97022",
+			domain: "https://cloud.umami.is",
+			apiPath: "/analytics",
+		},
+	},
 	favicon: [
 		{
 			src: 'https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200',
@@ -42,16 +52,22 @@ export const siteConfig: SiteConfig = {
 	],
 };
 
+const umami = siteConfig.analytics?.umami;
+const umamiShareUrl =
+	umami?.enable && umami?.domain && umami?.apiPath && umami?.shareId && umami?.region
+		? `${umami.domain}${umami.apiPath}/${umami.region}/share/${umami.shareId}`
+		: "";
+
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
-      name: '统计',
-      url: 'https://cloud.umami.is/analytics/us/share/bv965ko6FIRUoWem',
-      external: true,
-    },
+			name: "统计",
+			url: umamiShareUrl, // 内部链接不应包含基础路径，因为它会自动添加
+			external: true, // 显示外部链接图标并在新标签页中打开
+		},
 		{
 			name: "GitHub",
 			url: "https://github.com/xuanyue1024", // 内部链接不应包含基础路径，因为它会自动添加
