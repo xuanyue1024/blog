@@ -110,7 +110,8 @@ const jsonLd = {
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 
-            <div class="mb-6 onload-animation">
+            <!-- 评论区锚点：用于浮动按钮平滑滚动到评论位置 -->
+            <div id="comments-section" class="mb-6 onload-animation">
                 <script
                     src="https://giscus.app/client.js"
                     data-repo="xuanyue1024/xuanyue1024.github.io"
