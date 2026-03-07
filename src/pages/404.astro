@@ -1,0 +1,43 @@
+---
+import { Icon } from "astro-icon/components";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { url } from "@/utils/url-utils";
+---
+
+<MainGridLayout title="404" description="Page not found">
+	<section class="card-base relative overflow-hidden px-6 py-10 md:px-10 md:py-14 onload-animation">
+		<div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[oklch(0.9_0.08_var(--hue))] blur-2xl dark:bg-[oklch(0.35_0.12_var(--hue))]"></div>
+		<div class="pointer-events-none absolute -bottom-20 -left-20 h-52 w-52 rounded-full bg-[var(--btn-regular-bg)] blur-3xl"></div>
+
+		<div class="relative flex flex-col items-start gap-5">
+			<div class="flex items-center gap-3 rounded-full bg-[var(--btn-regular-bg)] px-4 py-2 text-sm font-medium text-75">
+				<Icon name="material-symbols:error-outline-rounded" class="text-[1.1rem] text-[var(--primary)]" />
+				<span>Page Not Found</span>
+			</div>
+
+			<h1 class="text-4xl md:text-6xl font-bold tracking-tight text-90">404</h1>
+			<p class="max-w-2xl text-base md:text-lg text-75 leading-relaxed">
+				你访问的页面不存在，可能已被移动、删除，或链接地址有误。
+			</p>
+
+			<div class="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+				<a
+					href={url("/")}
+					class="btn-regular h-11 rounded-lg px-5 font-medium"
+					aria-label="Back to home"
+				>
+					{i18n(I18nKey.home)}
+				</a>
+				<a
+					href={url("/archive/")}
+					class="btn-card h-11 rounded-lg px-5 font-medium text-75"
+					aria-label="Go to archive"
+				>
+					{i18n(I18nKey.archive)}
+				</a>
+			</div>
+		</div>
+	</section>
+</MainGridLayout>
