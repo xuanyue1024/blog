@@ -24,8 +24,7 @@ updated: 2026-01-19 23:01:38
 
 ## 配置步骤
 
-<img src="./assets/cdn.png" alt="CDN Animation" />
-
+![](assets/cdn.webp)
 ### 步骤 1：在 Cloudflare 配置 DNS
 
 确保 DNS 记录正确：
