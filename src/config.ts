@@ -29,6 +29,7 @@ export const siteConfig: SiteConfig = {
 		enable: true, // 在文章右侧显示目录
 		depth: 3, // 目录中显示的最大标题深度，范围 1 到 3
 	},
+	//数据统计配置
 	analytics: {
 		umami: {
 			enable: true,
@@ -79,14 +80,24 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "竹林听雨",
-	bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	bio: "In a world full of noise, finding clarity is the ultimate superpower.",
 	links: [
 		{
-			name: "Twitter",
-			icon: "fa6-brands:twitter", // 访问 https://icones.js.org/ 获取图标代码
+			name: "GitHub",
+			icon: "fa6-brands:github",
+			url: "https://github.com/xuanyue1024",
+		},
+		{
+			name: "哔哩哔哩",
+			icon: "fa6-brands:bilibili",
+			url: "https://space.bilibili.com/477155658",
+		},
+		{
+			name: "Gitee",
+			icon: "fa6-brands:git-alt", // 访问 https://icones.js.org/ 获取图标代码
 			// 如果尚未包含对应的图标集，你需要安装它
 			// `pnpm add @iconify-json/<图标集名称>`
-			url: "https://twitter.com",
+			url: "https://gitee.com/xuanyue03",
 		},
 		{
 			name: "Steam",
@@ -94,9 +105,9 @@ export const profileConfig: ProfileConfig = {
 			url: "https://store.steampowered.com",
 		},
 		{
-			name: "GitHub",
-			icon: "fa6-brands:github",
-			url: "https://github.com/xuanyue1024",
+			name: "CSDN",
+			icon: "fa6-brands:cloudsmith",
+			url: "https://blog.csdn.net/weixin_45564332",
 		},
 	],
 };
