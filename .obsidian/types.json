@@ -4,6 +4,8 @@
     "cssclasses": "multitext",
     "tags": "tags",
     "category": "multitext",
-    "sticky": "number"
+    "sticky": "number",
+    "published": "datetime",
+    "updated": "datetime"
   }
 }
