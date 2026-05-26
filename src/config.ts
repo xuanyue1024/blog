@@ -12,17 +12,17 @@ export const siteConfig: SiteConfig = {
 	subtitle: "🎉",
 	lang: "zh_CN", // 语言代码，例如 'en', 'zh_CN', 'ja' 等。
 	themeColor: {
-		hue: 285, // 主题颜色的默认色相，范围 0 到 360。例如：红色: 0, 青色: 200, 蓝绿色: 250, 粉色: 345
+		hue: 235, // 主题颜色的默认色相，范围 0 到 360。例如：红色: 0, 青色: 200, 蓝绿色: 250, 粉色: 345
 		fixed: false, // 对访问者隐藏主题颜色选择器
 	},
 	banner: {
-		enable: false,
-		src: "assets/images/demo-banner.png", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+		enable: true,
+		src: "https://bing.img.run/1920x1080.php", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 		position: "center", // 等同于 object-position，仅支持 'top', 'center', 'bottom'。默认为 'center'
 		credit: {
-			enable: false, // 显示横幅图片的署名文字
-			text: "", // 要显示的署名文字
-			url: "", // (可选) 原始作品或艺术家页面的链接
+			enable: true, // 显示横幅图片的署名文字
+			text: "Bing 今日壁纸", // 要显示的署名文字
+			url: "https://www.microsoft.com/zh-cn/bing/features/bing-wallpaper/", // (可选) 原始作品或艺术家页面的链接
 		},
 	},
 	toc: {

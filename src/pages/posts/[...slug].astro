@@ -13,6 +13,7 @@ import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
+import GiscusComments from "../../components/GiscusComments.svelte";
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -112,23 +113,7 @@ const jsonLd = {
 
             <!-- 评论区锚点：用于浮动按钮平滑滚动到评论位置 -->
             <div id="comments-section" class="mb-6 onload-animation">
-                <script
-                    src="https://giscus.app/client.js"
-                    data-repo="xuanyue1024/xuanyue1024.github.io"
-                    data-repo-id="R_kgDONx7jdQ"
-                    data-category="Announcements"
-                    data-category-id="DIC_kwDONx7jdc4CrpVg"
-                    data-mapping="pathname"
-                    data-strict="1"
-                    data-reactions-enabled="1"
-                    data-emit-metadata="0"
-                    data-input-position="top"
-                    data-theme="preferred_color_scheme"
-                    data-lang="zh-CN"
-                    data-loading="lazy"
-                    crossorigin="anonymous"
-                    async
-                ></script>
+                <GiscusComments client:idle />
             </div>
 
         </div>
