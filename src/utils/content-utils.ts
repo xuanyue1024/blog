@@ -34,8 +34,8 @@ async function getRawSortedPosts() {
 	const sorted = allBlogPosts.sort((a, b) => {
 		// 优先按 sticky 降序排列：sticky 值越大越靠前
 		// 有 sticky 的文章排在无 sticky 的文章前面
-		const stickyA = a.data.sticky ?? -Infinity;
-		const stickyB = b.data.sticky ?? -Infinity;
+		const stickyA = a.data.sticky ?? Number.NEGATIVE_INFINITY;
+		const stickyB = b.data.sticky ?? Number.NEGATIVE_INFINITY;
 		if (stickyA !== stickyB) {
 			return stickyB > stickyA ? 1 : -1;
 		}
@@ -165,7 +165,9 @@ export async function getCategoryList(): Promise<Category[]> {
 		const partsB = b.split("/");
 		const minLen = Math.min(partsA.length, partsB.length);
 		for (let i = 0; i < minLen; i++) {
-			const cmp = partsA[i].toLowerCase().localeCompare(partsB[i].toLowerCase());
+			const cmp = partsA[i]
+				.toLowerCase()
+				.localeCompare(partsB[i].toLowerCase());
 			if (cmp !== 0) return cmp;
 		}
 		// 前缀相同时，层级少的（父级）排在前面

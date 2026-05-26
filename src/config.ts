@@ -42,8 +42,8 @@ export const siteConfig: SiteConfig = {
 	},
 	favicon: [
 		{
-			src: 'https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200',
-		}
+			src: "https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200",
+		},
 		// 留空此数组以使用默认 favicon
 		// {
 		//   src: '/favicon/icon.png',    // favicon 的路径，相对于 /public 目录
@@ -55,7 +55,11 @@ export const siteConfig: SiteConfig = {
 
 const umami = siteConfig.analytics?.umami;
 const umamiShareUrl =
-	umami?.enable && umami?.domain && umami?.apiPath && umami?.shareId && umami?.region
+	umami?.enable &&
+	umami?.domain &&
+	umami?.apiPath &&
+	umami?.shareId &&
+	umami?.region
 		? `${umami.domain}${umami.apiPath}/${umami.region}/share/${umami.shareId}`
 		: "";
 
@@ -78,7 +82,8 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+	avatar:
+		"https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "竹林听雨",
 	bio: "In a world full of noise, finding clarity is the ultimate superpower.",
 	links: [
