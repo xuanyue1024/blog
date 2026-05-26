@@ -173,6 +173,10 @@ const umami = siteConfig.analytics?.umami;
 	'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
 	'banner-height': `${BANNER_HEIGHT}vh`,
 }}>
+	html {
+		text-autospace: normal;
+	}
+
 @tailwind components;
 @layer components {
 	.enable-banner.is-home #banner-wrapper {
