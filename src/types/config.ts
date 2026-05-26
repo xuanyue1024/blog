@@ -44,6 +44,7 @@ export type SiteConfig = {
 			websiteId?: string;
 			domain: string;
 			apiPath?: string;
+			pageStatsUrl: string; //文章页面统计接口
 		};
 	};
 

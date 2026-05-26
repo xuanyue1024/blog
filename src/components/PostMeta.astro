@@ -96,9 +96,7 @@ const enableStats = Boolean(showStats && umami?.enable && umami?.shareId && umam
             <div
                 class="flex items-center"
                 data-umami-post-stats
-                data-umami-region={umami?.region}
-                data-umami-share-id={umami?.shareId}
-                data-umami-api-base={`${umami?.domain}${umami?.apiPath}`}
+                data-umami-page-stats-url={umami?.pageStatsUrl}
                 data-umami-path={statsPath}
             >
                 <div class="meta-icon">

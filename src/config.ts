@@ -38,6 +38,7 @@ export const siteConfig: SiteConfig = {
 			websiteId: "16af8c8f-ff88-4d6a-a8d3-4ec3cfb97022",
 			domain: "https://cloud.umami.is",
 			apiPath: "/analytics",
+			pageStatsUrl: "https://api.vercel.yanghc.cn/api/umami/post-stats",
 		},
 	},
 	favicon: [

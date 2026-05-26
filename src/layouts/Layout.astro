@@ -389,9 +389,7 @@ async function loadPostStats(container: Element) {
 	if (container.dataset.loaded === 'true') return;
 	container.dataset.loaded = 'true';
 
-	const region = container.dataset.umamiRegion;
-	const shareId = container.dataset.umamiShareId;
-	const apiBase = container.dataset.umamiApiBase;
+	const apiUrl = container.dataset.umamiPageStatsUrl;
 	const pagePath = container.dataset.umamiPath || window.location.pathname;
 
 	const root = container.parentElement;
@@ -399,29 +397,19 @@ async function loadPostStats(container: Element) {
 	const visitorsEl = root?.querySelector('[data-stat="visitors"]');
 
 	// 配置不完整时直接退出，保留占位符。
-	if (!region || !shareId || !apiBase) {
+	if (!apiUrl) {
 		if (pageviewsEl) pageviewsEl.textContent = '--';
 		if (visitorsEl) visitorsEl.textContent = '--';
 		return;
 	}
 
 	try {
-		// 1) 先通过分享接口拿到只读 token 和 websiteId。
-		const shareRes = await fetch(`${apiBase}/${region}/api/share/${shareId}`);
-		if (!shareRes.ok) throw new Error(`Share API error: ${shareRes.status}`);
-		const shareData = await shareRes.json();
+		// 根据接口获取当前文章数据
+		const statsUrl = new URL(apiUrl);
+		statsUrl.searchParams.set('path', pagePath);
 
-		// 2) 再按当前文章路径精确匹配拉取累计统计数据。
-		const statsUrl = new URL(`${apiBase}/${region}/api/websites/${shareData.websiteId}/stats`);
-		statsUrl.searchParams.set('startAt', '0');
-		statsUrl.searchParams.set('endAt', String(Date.now()));
-		statsUrl.searchParams.set('path', `eq.${pagePath}`);
+		const statsRes = await fetch(statsUrl.toString());
 
-		const statsRes = await fetch(statsUrl.toString(), {
-			headers: {
-				'x-umami-share-token': shareData.token,
-			},
-		});
 		if (!statsRes.ok) throw new Error(`Stats API error: ${statsRes.status}`);
 		const stats = await statsRes.json();
 
