@@ -17,11 +17,17 @@ export const siteConfig: SiteConfig = {
 	},
 	banner: {
 		enable: true,
-		src: "https://bing.img.run/1920x1080.php", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+		// 注意：banner 图像必须支持 CORS 才能进行动态取色
+		// 支持 CORS 的推荐图像源：
+		//   - picsum.photos (免费，支持 CORS)
+		//   - unsplash (免费，高质量，支持 CORS)
+		//   - pexels (免费，支持 CORS)
+		//   - 本地图像：/banner.jpg (同域，自动支持)
+		src: "https://uapis.cn/api/v1/image/bing-daily?random=true&resolution=1080&format=image", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 		position: "center", // 等同于 object-position，仅支持 'top', 'center', 'bottom'。默认为 'center'
 		credit: {
 			enable: true, // 显示横幅图片的署名文字
-			text: "Bing 今日壁纸", // 要显示的署名文字
+			text: "Bing 每日壁纸", // 要显示的署名文字
 			url: "https://www.microsoft.com/zh-cn/bing/features/bing-wallpaper/", // (可选) 原始作品或艺术家页面的链接
 		},
 	},

@@ -3,6 +3,7 @@ import BackToTop from "@components/control/BackToTop.astro";
 import Footer from "@components/Footer.astro";
 import Navbar from "@components/Navbar.astro";
 import SideBar from "@components/widget/SideBar.astro";
+import DynamicThemeExtractor from "@components/DynamicThemeExtractor.svelte";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
@@ -58,6 +59,17 @@ const mainPanelTop = siteConfig.banner.enable
     >
     </ImageWrapper>
 </div>}
+
+<!-- 
+	动态主题颜色提取器
+	仅在以下条件下启用：
+	1. banner 已启用
+	2. 主题色未固定 (themeColor.fixed = false)
+	
+	使用 client:idle 指令以降低优先级，不阻塞页面加载
+	这样可以让关键渲染路径优先完成，再处理主题提取
+-->
+{siteConfig.banner.enable && !siteConfig.themeColor.fixed && <DynamicThemeExtractor client:idle bannerSrc={siteConfig.banner.src} enableDynamicColor={true}></DynamicThemeExtractor>}
 
 <!-- Main content -->
 <div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>
