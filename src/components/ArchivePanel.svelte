@@ -94,6 +94,15 @@ onMount(async () => {
 
 	groupedPostsArray.sort((a, b) => b.year - a.year);
 
+	// 按日期降序排列每个年份内的文章
+	groupedPostsArray.forEach((group) => {
+		group.posts.sort((a, b) => {
+			const dateA = new Date(a.data.published);
+			const dateB = new Date(b.data.published);
+			return dateA > dateB ? -1 : 1;
+		});
+	});
+
 	groups = groupedPostsArray;
 });
 </script>
