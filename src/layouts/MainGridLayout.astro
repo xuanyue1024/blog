@@ -4,6 +4,7 @@ import Footer from "@components/Footer.astro";
 import Navbar from "@components/Navbar.astro";
 import SideBar from "@components/widget/SideBar.astro";
 import DynamicThemeExtractor from "@components/DynamicThemeExtractor.svelte";
+import BannerSaying from "@components/BannerSaying.svelte";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
@@ -58,6 +59,9 @@ const mainPanelTop = siteConfig.banner.enable
                   src={siteConfig.banner.src} position={siteConfig.banner.position}
     >
     </ImageWrapper>
+    {siteConfig.banner.saying.enable && (
+        <BannerSaying client:idle api={siteConfig.banner.saying.api}></BannerSaying>
+    )}
 </div>}
 
 <!-- 

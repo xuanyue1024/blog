@@ -26,6 +26,10 @@ export const siteConfig: SiteConfig = {
 		//   - 本地图像：/banner.jpg (同域，自动支持)
 		src: "https://uapis.cn/api/v1/image/bing-daily?random=true&resolution=1080&format=image", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 		position: "center", // 等同于 object-position，仅支持 'top', 'center', 'bottom'。默认为 'center'
+		saying: {
+			enable: true, // 是否在横幅中间显示随机一言（仅当 banner.enable = true 时生效）
+			api: "https://uapis.cn/api/v1/saying",
+		},
 		credit: {
 			enable: true, // 显示横幅图片的署名文字
 			text: "Bing 每日壁纸", // 要显示的署名文字
