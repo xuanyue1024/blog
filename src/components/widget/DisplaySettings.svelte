@@ -2,16 +2,53 @@
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
-import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
+import {
+  getDefaultHue,
+  getDynamicThemeColorEnabled,
+  getHue,
+  isDynamicThemeColorAvailable,
+  setDynamicThemeColorEnabled,
+  setHue,
+} from "@utils/setting-utils";
 
 let hue = getHue();
 const defaultHue = getDefaultHue();
+// 动态取色是否具备可用条件（当前要求 banner.enable=true）。
+const dynamicThemeColorAvailable = isDynamicThemeColorAvailable();
+// 初始化时遵循“本地优先，其次配置”的最终开关值。
+let dynamicThemeColorEnabled =
+  dynamicThemeColorAvailable && getDynamicThemeColorEnabled();
 
+/**
+ * 处理动态取色开关切换。
+ * - 当不可用时强制回退为 false；
+ * - 当用户关闭动态取色时，立即恢复手动 hue 控制并应用当前滑块值。
+ */
+function onDynamicThemeColorToggle() {
+  if (!dynamicThemeColorAvailable) {
+    dynamicThemeColorEnabled = false;
+    return;
+  }
+
+  setDynamicThemeColorEnabled(dynamicThemeColorEnabled);
+  if (!dynamicThemeColorEnabled) {
+    setHue(hue);
+  }
+}
+
+/**
+ * 重置 hue 为配置默认值。
+ * 边界：动态取色开启时不允许手动重置，避免与自动提取冲突。
+ */
 function resetHue() {
+  if (dynamicThemeColorEnabled) {
+    return;
+  }
 	hue = getDefaultHue();
 }
 
-$: if (hue || hue === 0) {
+// 仅在“手动模式”下同步 hue 到 CSS 变量，避免覆盖动态提取结果。
+$: if ((hue || hue === 0) && !dynamicThemeColorEnabled) {
 	setHue(hue);
 }
 </script>
@@ -37,9 +74,24 @@ $: if (hue || hue === 0) {
             </div>
         </div>
     </div>
-    <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
+      <div class="mb-3 flex items-center justify-between">
+        <label for="dynamic-theme-color-switch" class="font-semibold text-[var(--btn-content)]">
+          {i18n(I18nKey.dynamicThemeColor)}
+        </label>
+        <input
+          id="dynamic-theme-color-switch"
+          type="checkbox"
+          bind:checked={dynamicThemeColorEnabled}
+          on:change={onDynamicThemeColorToggle}
+          aria-label={i18n(I18nKey.dynamicThemeColor)}
+          class="h-4 w-4 cursor-pointer accent-[var(--primary)]"
+          disabled={!dynamicThemeColorAvailable}
+        >
+      </div>
+      <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none"
+         class:opacity-50={dynamicThemeColorEnabled}>
         <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
-               class="slider" id="colorSlider" step="5" style="width: 100%">
+             class="slider" id="colorSlider" step="5" style="width: 100%" disabled={dynamicThemeColorEnabled}>
     </div>
 </div>
 

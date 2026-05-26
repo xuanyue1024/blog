@@ -64,12 +64,12 @@ const mainPanelTop = siteConfig.banner.enable
 	动态主题颜色提取器
 	仅在以下条件下启用：
 	1. banner 已启用
-	2. 主题色未固定 (themeColor.fixed = false)
+    2. 开关最终状态为开启（本地存储优先，其次配置）
 	
 	使用 client:idle 指令以降低优先级，不阻塞页面加载
 	这样可以让关键渲染路径优先完成，再处理主题提取
 -->
-{siteConfig.banner.enable && !siteConfig.themeColor.fixed && <DynamicThemeExtractor client:idle bannerSrc={siteConfig.banner.src} enableDynamicColor={true}></DynamicThemeExtractor>}
+{siteConfig.banner.enable && <DynamicThemeExtractor client:idle bannerSrc={siteConfig.banner.src}></DynamicThemeExtractor>}
 
 <!-- Main content -->
 <div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>

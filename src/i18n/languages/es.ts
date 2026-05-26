@@ -25,6 +25,7 @@ export const es: Translation = {
 	[Key.postsCount]: "publicaciones",
 
 	[Key.themeColor]: "Color del tema",
+	[Key.dynamicThemeColor]: "Color dinámico del tema",
 
 	[Key.lightMode]: "Claro",
 	[Key.darkMode]: "Oscuro",

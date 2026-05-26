@@ -9,12 +9,13 @@
 
 	import { onMount } from "svelte";
 	import { extractHueFromImage } from "../utils/color-utils";
-	import { setHue } from "../utils/setting-utils";
+	import {
+		getDynamicThemeColorEnabled,
+		setHue,
+	} from "../utils/setting-utils";
 
 	/** banner 图像 URL */
 	export let bannerSrc: string = "";
-	/** 是否启用动态取色 */
-	export let enableDynamicColor: boolean = true;
 
 	let isExtracting = false;
 	
@@ -22,6 +23,15 @@
 	const isDev = import.meta.env.DEV;
 	const log = (...args: unknown[]) => isDev && console.log("[DynamicTheme]", ...args);
 	const error = (...args: unknown[]) => isDev && console.error("[DynamicTheme]", ...args);
+
+	/**
+	 * 读取动态取色最终开关。
+	 * 规则：严格遵循“本地优先 + 配置回退 + banner 约束”。
+	 * 说明：不能再叠加额外硬门禁，否则会破坏本地开关的最高优先级。
+	 */
+	function isDynamicColorEnabled() {
+		return getDynamicThemeColorEnabled();
+	}
 
 	/**
 	 * 将色相值应用到主题
@@ -40,7 +50,7 @@
 	 * 从 banner 图像中提取色相并应用到主题
 	 */
 	async function extractAndApplyTheme() {
-		if (!enableDynamicColor || !bannerSrc || isExtracting) {
+		if (!isDynamicColorEnabled() || !bannerSrc || isExtracting) {
 			return;
 		}
 
@@ -50,6 +60,10 @@
 		try {
 			log("Extracting color from:", bannerSrc);
 			const hue = await extractHueFromImage(bannerSrc);
+			if (!isDynamicColorEnabled()) {
+				log("Dynamic color disabled before apply, skip hue update");
+				return;
+			}
 			const duration = (performance.now() - startTime).toFixed(2);
 			log(`Extracted hue: ${hue} (${duration}ms)`);
 			applyHueToTheme(hue);
@@ -103,11 +117,11 @@
 	 * 组件挂载 - 初始化监听
 	 */
 	onMount(() => {
-		log("Component mounted", { enableDynamicColor, bannerSrc });
+		log("Component mounted", { bannerSrc });
 		
-		if (!enableDynamicColor) {
+		if (!isDynamicColorEnabled()) {
 			log("Dynamic color disabled via config");
-			return;
+			// 即使初始关闭，也要监听后续开关变化
 		}
 		
 		if (!bannerSrc) {
@@ -115,14 +129,29 @@
 			return;
 		}
 
-		// 延迟启动以确保 DOM 完全渲染
-		// 使用 200ms 延迟给 Astro 的 swup 过渡留有余量
-		const timer = setTimeout(() => {
+		/**
+		 * 仅在动态取色开启时执行图片监听与取色。
+		 * 副作用：可能触发一次 hue 更新（写入 localStorage + CSS 变量）。
+		 */
+		const runWhenEnabled = () => {
+			if (!isDynamicColorEnabled()) {
+				return;
+			}
 			log("Starting banner detection...");
 			watchBannerImage();
-		}, 200);
+		};
 
-		return () => clearTimeout(timer);
+		// 延迟启动以确保 DOM 完全渲染
+		// 使用 200ms 延迟给 Astro 的 swup 过渡留有余量
+		const timer = setTimeout(runWhenEnabled, 200);
+		// 监听设置面板开关变化：用户开启动态取色后，无需刷新页面即可触发提取。
+		const onDynamicChange = () => runWhenEnabled();
+		window.addEventListener("dynamic-theme-color-change", onDynamicChange);
+
+		return () => {
+			clearTimeout(timer);
+			window.removeEventListener("dynamic-theme-color-change", onDynamicChange);
+		};
 	});
 </script>
 

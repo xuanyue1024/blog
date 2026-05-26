@@ -3,5 +3,10 @@
 import { siteConfig } from "../config";
 ---
 
-<div id="config-carrier" data-hue={siteConfig.themeColor.hue}>
+<div
+	id="config-carrier"
+	data-hue={siteConfig.themeColor.hue}
+	data-dynamic-theme-color={siteConfig.themeColor.dynamic ? "true" : "false"}
+	data-banner-enabled={siteConfig.banner.enable ? "true" : "false"}
+>
 </div>
