@@ -178,7 +178,7 @@ const log = (...args) => isDev && console.log(...args);
 #### 条件加载
 
 ```html
-<!-- 仅在满足条件时加载组件 -->
+<!-- 仅在满足条件时加载组件；取色时只采样 banner 的可见区域 -->
 {siteConfig.banner.enable && 
  !siteConfig.themeColor.fixed && 
  <DynamicThemeExtractor client:idle ... />}

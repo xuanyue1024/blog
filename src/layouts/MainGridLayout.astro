@@ -1,10 +1,10 @@
 ---
+import BannerSaying from "@components/BannerSaying.svelte";
 import BackToTop from "@components/control/BackToTop.astro";
+import DynamicThemeExtractor from "@components/DynamicThemeExtractor.svelte";
 import Footer from "@components/Footer.astro";
 import Navbar from "@components/Navbar.astro";
 import SideBar from "@components/widget/SideBar.astro";
-import DynamicThemeExtractor from "@components/DynamicThemeExtractor.svelte";
-import BannerSaying from "@components/BannerSaying.svelte";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
@@ -73,7 +73,7 @@ const mainPanelTop = siteConfig.banner.enable
 	使用 client:idle 指令以降低优先级，不阻塞页面加载
 	这样可以让关键渲染路径优先完成，再处理主题提取
 -->
-{siteConfig.banner.enable && <DynamicThemeExtractor client:idle bannerSrc={siteConfig.banner.src}></DynamicThemeExtractor>}
+{siteConfig.banner.enable && <DynamicThemeExtractor client:idle bannerSrc={siteConfig.banner.src} bannerPosition={siteConfig.banner.position}></DynamicThemeExtractor>}
 
 <!-- Main content -->
 <div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>

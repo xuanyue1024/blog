@@ -25,7 +25,7 @@ export const siteConfig: SiteConfig = {
 		//   - pexels (免费，支持 CORS)
 		//   - 本地图像：/banner.jpg (同域，自动支持)
 		src: "https://uapis.cn/api/v1/image/bing-daily?random=true&resolution=1080&format=image", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
-		position: "center", // 等同于 object-position，仅支持 'top', 'center', 'bottom'。默认为 'center'
+		position: "center", // 等同于 object-position，仅支持 'top', 'center', 'bottom'。会影响 banner 展示与动态取色的可见区域，默认为 'center'
 		saying: {
 			enable: true, // 是否在横幅中间显示随机一言（仅当 banner.enable = true 时生效）
 			api: "https://uapis.cn/api/v1/saying",
@@ -54,8 +54,8 @@ export const siteConfig: SiteConfig = {
 	},
 	favicon: [
 		{
-			src: 'https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200',
-		}
+			src: "https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200",
+		},
 		// 留空此数组以使用默认 favicon
 		// {
 		//   src: '/favicon/icon.png',    // favicon 的路径，相对于 /public 目录
@@ -67,7 +67,11 @@ export const siteConfig: SiteConfig = {
 
 const umami = siteConfig.analytics?.umami;
 const umamiShareUrl =
-	umami?.enable && umami?.domain && umami?.apiPath && umami?.shareId && umami?.region
+	umami?.enable &&
+	umami?.domain &&
+	umami?.apiPath &&
+	umami?.shareId &&
+	umami?.region
 		? `${umami.domain}${umami.apiPath}/${umami.region}/share/${umami.shareId}`
 		: "";
 
@@ -90,7 +94,8 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+	avatar:
+		"https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "竹林听雨",
 	bio: "In a world full of noise, finding clarity is the ultimate superpower.",
 	links: [
