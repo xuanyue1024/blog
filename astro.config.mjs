@@ -29,6 +29,9 @@ export default defineConfig({
 	site: "https://yanghc.dev/",
 	base: "/",
 	trailingSlash: "always",
+	server: {
+		host: "0.0.0.0",
+	},
 	integrations: [
 		tailwind({
 			nesting: true,
