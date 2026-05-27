@@ -11,13 +11,13 @@ import { Icon } from "astro-icon/components";
 -->
 <div class="back-to-top-wrapper hidden lg:block">
     <!-- 评论区跳转按钮：仅文章页显示（由 comments-page-hidden + JS 控制） -->
-    <div id="jump-to-comments-btn" class="back-to-comments-btn comments-page-hidden flex items-center rounded-2xl overflow-hidden transition" onclick="jumpToComments()">
+    <div id="jump-to-comments-btn" class="back-to-comments-btn comments-page-hidden flex items-center rounded-2xl overflow-hidden transition">
         <button aria-label="Jump to Comments" class="btn-card h-[3.75rem] w-[3.75rem]">
             <Icon name="material-symbols:chat-rounded" class="mx-auto"></Icon>
         </button>
     </div>
     <!-- 回到顶部按钮：由全局滚动逻辑控制显隐（Layout.astro 中 scrollFunction） -->
-    <div id="back-to-top-btn" class="back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="backToTop()">
+    <div id="back-to-top-btn" class="back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition">
         <button aria-label="Back to Top" class="btn-card h-[3.75rem] w-[3.75rem]">
             <Icon name="material-symbols:keyboard-arrow-up-rounded" class="mx-auto"></Icon>
         </button>
@@ -70,50 +70,60 @@ import { Icon } from "astro-icon/components";
 </style>
 
 <script is:raw is:inline>
-// 文章详情页中评论区容器的锚点 id（定义在 src/pages/posts/[...slug].astro）。
-const COMMENTS_ANCHOR_ID = 'comments-section';
+(() => {
+    // 文章详情页中评论区容器的锚点 id（定义在 src/pages/posts/[...slug].astro）。
+    const COMMENTS_ANCHOR_ID = 'comments-section';
 
-// 平滑回到页面顶部。
-function backToTop() {
-    window.scroll({ top: 0, behavior: 'smooth' });
-}
+    // 平滑回到页面顶部。
+    const backToTop = () => {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    };
 
-// 平滑滚动到评论区；若锚点不存在则直接返回。
-function jumpToComments() {
-    const commentsAnchor = document.getElementById(COMMENTS_ANCHOR_ID);
-    if (!commentsAnchor) {
-        return;
-    }
-    commentsAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// 根据当前路径判断是否为文章页，仅文章页显示评论按钮。
-function syncCommentsButtonPageVisibility() {
-    const commentsBtn = document.getElementById('jump-to-comments-btn');
-    if (!commentsBtn) {
-        return;
-    }
-
-    const isPostPage = window.location.pathname.includes('/posts/');
-    commentsBtn.classList.toggle('comments-page-hidden', !isPostPage);
-}
-
-// 首次加载时立即同步一次，保证刷新后状态正确。
-syncCommentsButtonPageVisibility();
-
-if (window.swup && window.swup.hooks) {
-    // swup 无刷新切页后，路径变化了，需要再次同步评论按钮显隐。
-    window.swup.hooks.on('page:view', () => {
-        syncCommentsButtonPageVisibility();
-    });
-} else {
-    // swup 尚未初始化时，等待启用事件后再绑定 page:view 回调。
-    document.addEventListener('swup:enable', () => {
-        if (window.swup && window.swup.hooks) {
-            window.swup.hooks.on('page:view', () => {
-                syncCommentsButtonPageVisibility();
-            });
+    // 平滑滚动到评论区；若锚点不存在则直接返回。
+    const jumpToComments = () => {
+        const commentsAnchor = document.getElementById(COMMENTS_ANCHOR_ID);
+        if (!commentsAnchor) {
+            return;
         }
-    });
-}
+        commentsAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // 根据当前路径判断是否为文章页，仅文章页显示评论按钮。
+    const syncCommentsButtonPageVisibility = () => {
+        const commentsBtn = document.getElementById('jump-to-comments-btn');
+        if (!commentsBtn) {
+            return;
+        }
+
+        const isPostPage = window.location.pathname.includes('/posts/');
+        commentsBtn.classList.toggle('comments-page-hidden', !isPostPage);
+    };
+
+    const bindButtonEvents = () => {
+        document.getElementById('jump-to-comments-btn')?.addEventListener('click', jumpToComments);
+        document.getElementById('back-to-top-btn')?.addEventListener('click', backToTop);
+    };
+
+    // 首次加载时立即同步一次，保证刷新后状态正确。
+    syncCommentsButtonPageVisibility();
+    bindButtonEvents();
+
+    if (window.swup && window.swup.hooks) {
+        // swup 无刷新切页后，路径变化了，需要再次同步评论按钮显隐。
+        window.swup.hooks.on('page:view', () => {
+            syncCommentsButtonPageVisibility();
+            bindButtonEvents();
+        });
+    } else {
+        // swup 尚未初始化时，等待启用事件后再绑定 page:view 回调。
+        document.addEventListener('swup:enable', () => {
+            if (window.swup && window.swup.hooks) {
+                window.swup.hooks.on('page:view', () => {
+                    syncCommentsButtonPageVisibility();
+                    bindButtonEvents();
+                });
+            }
+        });
+    }
+})();
 </script>
