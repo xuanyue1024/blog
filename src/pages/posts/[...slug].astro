@@ -14,6 +14,7 @@ import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 import GiscusComments from "../../components/GiscusComments.svelte";
+import MermaidRuntime from "../../components/MermaidRuntime.svelte";
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -25,6 +26,8 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
+// 仅当正文中包含 mermaid 代码块时才挂载运行时渲染器，减少无效水合。
+const hasMermaidBlocks = /```\s*mermaid\b/i.test(entry.body);
 
 const { remarkPluginFrontmatter } = await entry.render();
 
@@ -108,6 +111,8 @@ const jsonLd = {
             <Markdown class="mb-6 markdown-content onload-animation">
                 <Content />
             </Markdown>
+
+            {hasMermaidBlocks && <MermaidRuntime client:idle />}
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 

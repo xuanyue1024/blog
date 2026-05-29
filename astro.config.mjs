@@ -19,6 +19,7 @@ import { expressiveCodeConfig } from "./src/config.ts";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
+import { remarkMermaidBlocks } from "./src/plugins/remark-mermaid-blocks.js";
 import { remarkNormalizeCodeLanguage } from "./src/plugins/remark-normalize-code-language.js";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
@@ -115,6 +116,7 @@ export default defineConfig({
 			remarkDirective,
 			remarkSectionize,
 			remarkNormalizeCodeLanguage,
+			remarkMermaidBlocks,
 			parseDirectiveNode,
 		],
 		rehypePlugins: [
