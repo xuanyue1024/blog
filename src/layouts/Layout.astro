@@ -104,6 +104,9 @@ const umami = siteConfig.analytics?.umami;
 
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+
+		<!-- 自定义字体 -->
+		<link rel="stylesheet" href="https://cn-font.claude-code-best.win/packages/dymh/dist/DouyinSansBold/result.css" />
 		
 		<!-- 统计接口 -->
 		{umami?.enable && umami?.websiteId && umami?.domain && (

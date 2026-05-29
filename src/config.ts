@@ -97,7 +97,7 @@ export const profileConfig: ProfileConfig = {
 	avatar:
 		"https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "竹林听雨",
-	bio: "In a world full of noise, finding clarity is the ultimate superpower.",
+	bio: "It will be all right on the night.",
 	links: [
 		{
 			name: "GitHub",
@@ -111,21 +111,26 @@ export const profileConfig: ProfileConfig = {
 		},
 		{
 			name: "Gitee",
-			icon: "fa6-brands:git-alt", // 访问 https://icones.js.org/ 获取图标代码
+			icon: "logo/gitee", // 访问 https://icones.js.org/ 获取图标代码
 			// 如果尚未包含对应的图标集，你需要安装它
 			// `pnpm add @iconify-json/<图标集名称>`
 			url: "https://gitee.com/xuanyue03",
 		},
 		{
 			name: "酷安",
-			icon: "fa6-brands:android",
+			icon: "logo/coolapk",
 			url: "http://www.coolapk.com/u/1869130",
 		},
 		{
 			name: "CSDN",
-			icon: "fa6-brands:cloudsmith",
+			icon: "logo/csdn",
 			url: "https://blog.csdn.net/weixin_45564332",
 		},
+		// {
+		// 	name: "LinuxDo",
+		// 	icon: "logo/linuxdo",
+		// 	url: "",
+		// },
 	],
 };
 
