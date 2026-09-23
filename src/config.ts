@@ -40,10 +40,6 @@ export const siteConfig: SiteConfig = {
 		enable: true, // 在文章右侧显示目录
 		depth: 3, // 目录中显示的最大标题深度，范围 1 到 3
 	},
-	htmlDemo: {
-		enable: false, // 是否在构建阶段将 ```html-demo 转为 iframe 演示；关闭后会按普通代码块展示
-		cssUrl: "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css", // 可选的外部样式地址（如 Pico.css）；留空则不注入 CSS
-	},
 	//数据统计配置
 	analytics: {
 		umami: {

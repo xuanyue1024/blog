@@ -14,58 +14,6 @@ const className = Astro.props.class;
 </div>
 
 <script>
-/**
- * 处理 html-demo iframe 的高度回传，把 iframe 撑到完整内容高度，避免内部滚动条。
- *
- * 为什么放在这里：
- * - Markdown 文章内容最终都被包在这个容器中；
- * - 通过一个全局监听器即可处理所有文章中的 html-demo；
- * - 使用一次性绑定，避免 Swup 页面切换时重复注册监听。
- */
-const htmlDemoResizeKey = "__htmlDemoResizeBound";
-
-function bindHtmlDemoResizeListener() {
-    const win = window as Window & { [htmlDemoResizeKey]?: boolean };
-    if (win[htmlDemoResizeKey]) {
-        return;
-    }
-    win[htmlDemoResizeKey] = true;
-
-const htmlDemoHeightMap = new WeakMap<HTMLIFrameElement, number>();
-
-function onMessage(event: MessageEvent) {
-    const data = event.data as { type?: string; id?: string; height?: number } | null;
-    if (!data || data.type !== "html-demo-height" || typeof data.height !== "number") {
-        return;
-    }
-
-    const frames = Array.from(document.querySelectorAll<HTMLIFrameElement>("iframe.html-demo-iframe"));
-    if (frames.length === 0) {
-        return;
-    }
-
-    const target =
-        (typeof data.id === "string" && data.id
-            ? frames.find((frame) => frame.dataset.htmlDemoId === data.id)
-            : undefined) ??
-        frames.find((frame) => frame.contentWindow === event.source);
-    if (!target) {
-        return;
-    }
-
-    const nextHeight = Math.max(120, Math.ceil(data.height));
-    if (htmlDemoHeightMap.get(target) === nextHeight) {
-        return;
-    }
-    htmlDemoHeightMap.set(target, nextHeight);
-    target.style.height = `${nextHeight}px`;
-}
-
-window.addEventListener("message", onMessage);
-}
-
-bindHtmlDemoResizeListener();
-
 document.addEventListener("click", function (e: MouseEvent) {
     const target = e.target as Element | null;
     if (target && target.classList.contains("copy-btn")) {
