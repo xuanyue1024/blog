@@ -40,6 +40,18 @@ export type SiteConfig = {
 		depth: 1 | 2 | 3;
 	};
 
+	/**
+	 * HTML Demo 渲染配置。
+	 *
+	 * 说明：
+	 * - enable: 控制是否在构建阶段将 ```html-demo 代码块转换为 iframe 演示块；关闭后按普通代码块展示。
+	 * - cssUrl: 可选的外部样式地址（例如 Pico.css）；为空时不注入任何样式链接。
+	 */
+	htmlDemo: {
+		enable: boolean;
+		cssUrl?: string;
+	};
+
 	// 统计分析相关参数
 	analytics?: {
 		umami?: {

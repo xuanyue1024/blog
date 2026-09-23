@@ -15,10 +15,11 @@ import remarkDirective from "remark-directive"; /* Handle directives */
 import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-directives";
 import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
-import { expressiveCodeConfig } from "./src/config.ts";
+import { expressiveCodeConfig, siteConfig } from "./src/config.ts";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
+import { remarkHtmlDemoBlocks } from "./src/plugins/remark-html-demo-blocks.js";
 import { remarkMermaidBlocks } from "./src/plugins/remark-mermaid-blocks.js";
 import { remarkNormalizeCodeLanguage } from "./src/plugins/remark-normalize-code-language.js";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
@@ -117,6 +118,7 @@ export default defineConfig({
 			remarkSectionize,
 			remarkNormalizeCodeLanguage,
 			remarkMermaidBlocks,
+			[remarkHtmlDemoBlocks, siteConfig.htmlDemo],
 			parseDirectiveNode,
 		],
 		rehypePlugins: [
