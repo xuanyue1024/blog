@@ -95,7 +95,7 @@ export const navBarConfig: NavBarConfig = {
 
 export const profileConfig: ProfileConfig = {
 	avatar:
-		"https://foruda.gitee.com/avatar/1671549130798899777/8687215_xuanyue03_1671549130.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+		"https://foruda.gitee.com/avatar/1790182717393994971/8687215_xuanyue03_1790182717.png!avatar200", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "竹林听雨",
 	bio: "It will be all right on the night.",
 	links: [
